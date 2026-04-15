@@ -146,6 +146,9 @@ function initializeApp() {
         chatContainer.appendChild(messageDiv);
         scrollToBottom();
     }
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+       document.body.classList.toggle('dark-theme');
+   });
     
     // ============================================
     // 8. FONCTION TEMPORAIRE POUR GÉNÉRER DES RÉPONSES
