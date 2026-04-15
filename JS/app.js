@@ -95,6 +95,16 @@ function initializeApp() {
             addBotMessage(response);
         }, 1000);
     }
+    const responses = {
+    naturel: [ /* ... */ ],
+    roast: [ /* ... */ ],
+    sympathique: [ /* ... */ ],
+    philosophique: [
+        "Hmm... La connaissance est-elle vraiment accessible ? 🤔",
+        "Comme disait Socrate : 'Je sais que je ne sais rien'... 📚",
+        "Mais qu'est-ce qu'une question, sinon une quête de sens ? 🧘"
+    ]
+};
     
     // ============================================
     // 6. FONCTION POUR AJOUTER UN MESSAGE UTILISATEUR
@@ -113,6 +123,11 @@ function initializeApp() {
         chatContainer.appendChild(messageDiv);
         scrollToBottom();
     }
+    if (msg.includes('sens de la vie')) {
+    return mode === 'philosophique'
+        ? "Le sens de la vie, c'est peut-être de poser cette question... 🤔"
+        : "42, bien sûr ! 😄";
+}
     
     // ============================================
     // 7. FONCTION POUR AJOUTER UN MESSAGE DU BOT
