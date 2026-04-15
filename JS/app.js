@@ -1,164 +1,89 @@
-/* =================================================================
-   MODULE 1 : JAVASCRIPT DE BASE
-   Fichier: js/app.js
-   
-   Ce fichier contient la logique de base de notre chatbot.
-   Pour l'instant, nous allons juste gérer l'envoi de messages..
-   ================================================================= */
-
-// ============================================
-// 1. ATTENDRE QUE LA PAGE SOIT CHARGÉE
-// ============================================
 document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ Application chargée avec succès !');
-    
-    // Initialisation de l'application
     initializeApp();
 });
 
-// ============================================
-// 2. FONCTION D'INITIALISATION
-// ============================================
 function initializeApp() {
     console.log('🚀 Initialisation du chatbot...');
-    
-    // Sélection des éléments du DOM
+
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
     const chatContainer = document.getElementById('chat-container');
     const modeButtons = document.querySelectorAll('.mode-btn');
-    
-    // Variable pour stocker le mode actuel
+
     let currentMode = 'naturel';
-    
-    // ============================================
-    // 3. GESTION DES MODES (Naturel, Roast, Sympathique)
-    // ============================================
+
+    // Gestion des modes
     modeButtons.forEach(button => {
         button.addEventListener('click', function() {
-            // Retirer la classe 'active' de tous les boutons
             modeButtons.forEach(btn => btn.classList.remove('active'));
-            
-            // Ajouter 'active' au bouton cliqué
             this.classList.add('active');
-            
-            // Récupérer le mode sélectionné
             currentMode = this.getAttribute('data-mode');
-            
             console.log(`Mode changé : ${currentMode}`);
-            
-            // Afficher un message de confirmation
             addBotMessage(`Mode ${currentMode} activé ! 😎`);
         });
     });
-    
-    // ============================================
-    // 4. ENVOI DE MESSAGES
-    // ============================================
-    
-    // Événement au clic sur le bouton
+
+    // Bouton envoyer
     sendBtn.addEventListener('click', function() {
         sendMessage();
     });
-    
-    // Événement quand on appuie sur Entrée
+
+    // Touche Entrée
     userInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             sendMessage();
         }
     });
-    
-    // ============================================
-    // 5. FONCTION POUR ENVOYER UN MESSAGE
-    // ============================================
+
+    // ✅ Une seule fonction sendMessage() complète
     function sendMessage() {
         const message = userInput.value.trim();
-        
-        // Vérifier que le message n'est pas vide
+
         if (message === '') {
             console.log('⚠️ Message vide, rien à envoyer');
             return;
         }
-        
+
         console.log(`📤 Envoi du message : "${message}"`);
-        
-        // Afficher le message de l'utilisateur
+        console.log('Mode actuel:', currentMode);
+        console.log('Nombre de messages:', chatContainer.children.length);
+
         addUserMessage(message);
-        
-        // Effacer le champ de saisie
         userInput.value = '';
-        
-        // Simuler une réponse du bot (temporaire, Module 1)
-        // Dans les prochains modules, nous utiliserons l'IA
+
         setTimeout(() => {
             const response = generateTemporaryResponse(message, currentMode);
             addBotMessage(response);
         }, 1000);
     }
-    const responses = {
-    naturel: [ /* ... */ ],
-    roast: [ /* ... */ ],
-    sympathique: [ /* ... */ ],
-    philosophique: [
-        "Hmm... La connaissance est-elle vraiment accessible ? 🤔",
-        "Comme disait Socrate : 'Je sais que je ne sais rien'... 📚",
-        "Mais qu'est-ce qu'une question, sinon une quête de sens ? 🧘"
-    ]
-};
-    
-    // ============================================
-    // 6. FONCTION POUR AJOUTER UN MESSAGE UTILISATEUR
-    // ============================================
+
     function addUserMessage(text) {
         const messageDiv = document.createElement('div');
         messageDiv.className = 'message user-message';
-        
         messageDiv.innerHTML = `
             <div class="message-avatar">👤</div>
-            <div class="message-content">
-                <p>${escapeHtml(text)}</p>
-            </div>
+            <div class="message-content"><p>${escapeHtml(text)}</p></div>
         `;
-        
         chatContainer.appendChild(messageDiv);
         scrollToBottom();
     }
-    if (msg.includes('sens de la vie')) {
-    return mode === 'philosophique'
-        ? "Le sens de la vie, c'est peut-être de poser cette question... 🤔"
-        : "42, bien sûr ! 😄";
-}
-    
-    // ============================================
-    // 7. FONCTION POUR AJOUTER UN MESSAGE DU BOT
-    // ============================================
+
     function addBotMessage(text) {
         const messageDiv = document.createElement('div');
         messageDiv.className = 'message bot-message';
-        
         messageDiv.innerHTML = `
             <div class="message-avatar">🤖</div>
-            <div class="message-content">
-                <p>${escapeHtml(text)}</p>
-            </div>
+            <div class="message-content"><p>${escapeHtml(text)}</p></div>
         `;
-        
         chatContainer.appendChild(messageDiv);
         scrollToBottom();
     }
-    document.getElementById('theme-toggle').addEventListener('click', () => {
-       document.body.classList.toggle('dark-theme');
-   });
-    
-    // ============================================
-    // 8. FONCTION TEMPORAIRE POUR GÉNÉRER DES RÉPONSES
-    // (Sera remplacée par l'IA au Module 4)
-    // ============================================
+
     function generateTemporaryResponse(userMessage, mode) {
-        // Convertir en minuscules pour faciliter la détection
         const msg = userMessage.toLowerCase();
-        
-        // Réponses selon le mode
+
+        // ✅ Une seule déclaration de responses, avec philosophique inclus
         const responses = {
             naturel: [
                 "Hmm, intéressante question ! Pour l'instant je suis en mode apprentissage. 😊",
@@ -174,18 +99,22 @@ function initializeApp() {
                 "Quelle belle question ! 💖 Je suis impatient d'y répondre quand j'aurai mon IA !",
                 "Tu es trop gentil(le) de me poser cette question ! 🥰 Bientôt je pourrai t'aider !",
                 "Aww, j'aimerais tellement pouvoir répondre ! 💕 Patience, ça arrive !"
+            ],
+            philosophique: [
+                "Hmm... La connaissance est-elle vraiment accessible ? 🤔",
+                "Comme disait Socrate : 'Je sais que je ne sais rien'... 📚",
+                "Mais qu'est-ce qu'une question, sinon une quête de sens ? 🧘"
             ]
         };
-        
-        // Détection de mots-clés
+
         if (msg.includes('salut') || msg.includes('bonjour') || msg.includes('hello')) {
-            return mode === 'roast' 
-                ? "Salut toi ! Prêt(e) à te faire roast ? 🔥" 
+            return mode === 'roast'
+                ? "Salut toi ! Prêt(e) à te faire roast ? 🔥"
                 : mode === 'sympathique'
                 ? "Coucou ! 💖 Quel plaisir de te parler !"
                 : "Salut ! Comment puis-je t'aider ? 😊";
         }
-        
+
         if (msg.includes('merci') || msg.includes('thanks')) {
             return mode === 'roast'
                 ? "Ouais ouais, de rien... 😏"
@@ -193,37 +122,51 @@ function initializeApp() {
                 ? "Avec grand plaisir ! Tu es adorable ! 🥰"
                 : "De rien, ravi d'aider ! 😊";
         }
-        
+
         if (msg.includes('qui es-tu') || msg.includes('qui es tu')) {
-            return `Je suis un chatbot en mode ${mode} ! 🤖 En cours de développement dans le Module 1.`;
+            return `Je suis un chatbot en mode ${mode} ! 🤖`;
         }
-        
-        // Réponse par défaut selon le mode
+
+        // ✅ Le if du "sens de la vie" est bien DANS la fonction
+        if (msg.includes('sens de la vie')) {
+            return mode === 'philosophique'
+                ? "Le sens de la vie, c'est peut-être de poser cette question... 🤔"
+                : "42, bien sûr ! 😄";
+        }
+
         const modeResponses = responses[mode] || responses.naturel;
-        const randomIndex = Math.floor(Math.random() * modeResponses.length);
-        return modeResponses[randomIndex];
+        return modeResponses[Math.floor(Math.random() * modeResponses.length)];
     }
-    
-    // ============================================
-    // 9. FONCTIONS UTILITAIRES
-    // ============================================
-    
-    // Faire défiler vers le bas pour voir le dernier message
+
+    // ✅ L'event du thème est bien DANS initializeApp()
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+        });
+    }
+
     function scrollToBottom() {
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
-    
-    // Échapper le HTML pour éviter les injections XSS
+
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
 }
+   function showTypingIndicator() {
+     const indicator = document.createElement('div');
+     indicator.className = 'typing-indicator';
+     indicator.innerHTML = '<span></span><span></span><span></span>';
+     chatContainer.appendChild(indicator);
+    
+    setTimeout(() => {
+        indicator.remove();
+    }, 2000);
+}
 
-// ============================================
-// 10. MESSAGES DE DEBUG DANS LA CONSOLE
-// ============================================
 console.log(`
 ╔═══════════════════════════════════════╗
 ║   🤖 CHATBOT ÉTUDIANT - MODULE 1     ║
@@ -231,5 +174,4 @@ console.log(`
 ║   HTML, CSS et JavaScript !          ║
 ╚═══════════════════════════════════════╝
 `);
-
 console.log('💡 Astuce : Ouvre la console (F12) pour voir les logs de débogage !');
